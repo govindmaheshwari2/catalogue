@@ -16,7 +16,7 @@ try {
   canvas.style.display = "none";
   throw e;
 }
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 820 ? 1.5 : 1.8));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 
@@ -111,14 +111,17 @@ const leverGeo = new THREE.TubeGeometry(new LeverCurve(), 64, 0.21, 32, false);
   }
   leverGeo.computeVertexNormals();
 }
+// the arm pivots at the shaft so the whole lever can be "pressed"
+const arm = new THREE.Group();
+arm.position.set(-0.1, 0.02, 1.18);
 const lever = new THREE.Mesh(leverGeo, mat);
-lever.position.set(-0.1, 0.02, 1.18);
-handle.add(lever);
+arm.add(lever);
 // rounded tip
 const tip = new THREE.Mesh(new THREE.SphereGeometry(0.16, 32, 24), mat);
 tip.scale.set(1.15, 0.8, 0.9);
-tip.position.set(3.25, 0.02 + Math.sin(Math.PI * 0.42) * 0.16 - 0.5, 1.18);
-handle.add(tip);
+tip.position.set(3.35, Math.sin(Math.PI * 0.42) * 0.16 - 0.5, 0);
+arm.add(tip);
+handle.add(arm);
 
 handle.position.set(1.15, 0.1, 0);
 handle.rotation.set(0.22, -0.62, -0.08);
@@ -171,6 +174,40 @@ document.querySelectorAll(".fdot").forEach(dot => {
   });
 });
 
+/* ── press the handle (raycast click) ── */
+const raycaster = new THREE.Raycaster();
+const clickV = new THREE.Vector2();
+let pressing = false, hovering = false;
+function pressHandle() {
+  if (pressing) return;
+  pressing = true;
+  window.QS_SOUND?.thunk();
+  const hint = document.getElementById("heroHint");
+  if (hint) hint.style.opacity = 0;
+  if (window.gsap) {
+    gsap.timeline({ onComplete: () => pressing = false })
+      .to(arm.rotation, { z: -0.55, duration: 0.16, ease: "power3.out" })
+      .to(arm.rotation, { z: 0, duration: 1.1, ease: "elastic.out(1,0.32)" }, 0.22);
+  } else {
+    arm.rotation.z = 0; pressing = false;
+  }
+}
+window.QS_PRESS = pressHandle;
+function castAt(cx, cy) {
+  clickV.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1);
+  raycaster.setFromCamera(clickV, camera);
+  return raycaster.intersectObject(handle, true).length > 0;
+}
+canvas.addEventListener("pointerdown", e => {
+  if (castAt(e.clientX, e.clientY)) pressHandle();
+});
+// pointer-cursor affordance, checked at low frequency
+setInterval(() => {
+  if (document.hidden) return;
+  hovering = castAt(mouse.px ?? -1e4, mouse.py ?? -1e4);
+  canvas.style.cursor = hovering ? "pointer" : "";
+}, 160);
+
 /* ── scroll: rotate + drift the handle as hero leaves ── */
 let scrollP = 0;
 const hero = document.getElementById("hero");
@@ -181,10 +218,11 @@ const onScroll = () => {
 addEventListener("scroll", onScroll, { passive: true });
 
 /* ── mouse parallax ── */
-const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+const mouse = { x: 0, y: 0, tx: 0, ty: 0, px: null, py: null };
 addEventListener("pointermove", e => {
   mouse.tx = (e.clientX / innerWidth) * 2 - 1;
   mouse.ty = (e.clientY / innerHeight) * 2 - 1;
+  mouse.px = e.clientX; mouse.py = e.clientY;
 });
 
 /* ── resize ── */

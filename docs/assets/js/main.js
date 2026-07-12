@@ -22,6 +22,7 @@
     else document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
   };
   $$('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
+    if (a.closest(".mmenu") || a.classList.contains("skip-link")) return; // handled separately
     const id = a.getAttribute("href");
     if (id.length > 1 && $(id)) { e.preventDefault(); scrollTo(id); }
   }));
@@ -65,7 +66,7 @@
     document.addEventListener("mouseover", e => {
       const t = e.target.closest("[data-cursor]");
       cursor.className = "cursor" + (t ? " " + t.dataset.cursor.split(" ").join(" ") : "");
-      label.textContent = t && t.dataset.cursor === "-view" ? "VIEW" : "";
+      label.textContent = t ? ({ "-view": "VIEW", "-drag": "DRAG" }[t.dataset.cursor] || "") : "";
     });
   } else if (cursor) cursor.style.display = "none";
 
@@ -184,7 +185,7 @@
         invalidateOnRefresh: true,
         onUpdate: self => {
           const idx = Math.min(6, Math.max(1, Math.round(self.progress * 5) + 1));
-          $("#collCounter").textContent = `0${idx} / 06 — SCROLL TO TRAVEL`;
+          $("#collCounter").textContent = `0${idx} / 06 — DRAG OR SCROLL`;
         }
       }
     });
@@ -264,7 +265,7 @@
       `<i style="--g:${FIN[f] || FIN.SS}" title="${f}"></i>`).join("");
     const more = p.finishes.length > 3 ? `<em>+${p.finishes.length - 3}</em>` : "";
     el.innerHTML = `
-      <figure class="card__fig"><img src="assets/img/products/${p.img}.webp" alt="${p.model} ${p.type}" loading="lazy"></figure>
+      <figure class="card__fig"><img src="assets/img/products/${p.img}.webp" alt="${p.model} ${p.type}" loading="lazy" decoding="async"></figure>
       <div class="card__meta">
         <div><div class="card__model">${p.model}</div><div class="card__series">${p.series}</div></div>
         <div class="card__dots">${dots}${more}</div>
@@ -298,10 +299,15 @@
   }
   renderGrid("all");
 
-  // collections → filtered archive
+  // collections → filtered archive, through the brass wipe
   $$("[data-goto]").forEach(panel => {
-    const go = () => { applyFilter(panel.dataset.goto); scrollTo("#archive"); };
-    panel.addEventListener("click", go);
+    panel.addEventListener("click", () => wipeTo(() => {
+      applyFilter(panel.dataset.goto);
+      const y = $("#archive").getBoundingClientRect().top + (lenis ? lenis.scroll : scrollY) - 70;
+      if (lenis) lenis.scrollTo(y, { immediate: true });
+      else window.scrollTo(0, y);
+      ScrollTrigger.update();
+    }));
   });
 
   /* ───────── modal ───────── */
@@ -326,6 +332,7 @@
       `<span class="swatch"><i style="--g:${FIN[f] || FIN.SS}"></i>${f}</span>`).join("");
     $("#modalPdf").href = `catalog.pdf#page=${p.page}`;
     modal.hidden = false;
+    window.QS_SOUND?.click();
     if (lenis) lenis.stop();
     document.body.style.overflow = "hidden";
     gsap.fromTo(".modal__backdrop", { opacity: 0 }, { opacity: 1, duration: 0.35 });
@@ -403,6 +410,204 @@
     trigger: "#hero", start: "40% top",
     onEnter: () => gsap.to("#scrollCue", { autoAlpha: 0, duration: 0.4 }),
     onLeaveBack: () => gsap.to("#scrollCue", { autoAlpha: 1, duration: 0.4 })
+  });
+
+  /* ───────── sound design (synthesized, zero assets, opt-in) ───────── */
+  const Sound = (() => {
+    let ctx = null, on = false;
+    const ensure = () => (ctx ||= new (window.AudioContext || window.webkitAudioContext)());
+    const env = (node, t0, peak, dur) => {
+      node.gain.setValueAtTime(0.0001, t0);
+      node.gain.exponentialRampToValueAtTime(peak, t0 + 0.006);
+      node.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    };
+    const noiseBuf = () => {
+      const b = ctx.createBuffer(1, ctx.sampleRate * 0.12, ctx.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      return b;
+    };
+    function click() { // small metallic tick
+      if (!on) return; ensure();
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "square"; o.frequency.setValueAtTime(2100, t);
+      o.frequency.exponentialRampToValueAtTime(900, t + 0.045);
+      env(g, t, 0.055, 0.05);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + 0.07);
+      const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), ng = ctx.createGain();
+      n.buffer = noiseBuf(); f.type = "bandpass"; f.frequency.value = 4200; f.Q.value = 2;
+      env(ng, t, 0.04, 0.035);
+      n.connect(f).connect(ng).connect(ctx.destination); n.start(t); n.stop(t + 0.05);
+    }
+    function thunk() { // the latch — for pressing the handle
+      if (!on) return; ensure();
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.setValueAtTime(210, t);
+      o.frequency.exponentialRampToValueAtTime(70, t + 0.11);
+      env(g, t, 0.22, 0.13);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + 0.16);
+      const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), ng = ctx.createGain();
+      n.buffer = noiseBuf(); f.type = "lowpass"; f.frequency.value = 900;
+      env(ng, t + 0.005, 0.09, 0.07);
+      n.connect(f).connect(ng).connect(ctx.destination); n.start(t); n.stop(t + 0.09);
+    }
+    function whoosh() { // filtered sweep — menu / wipe
+      if (!on) return; ensure();
+      const t = ctx.currentTime;
+      const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      const b = ctx.createBuffer(1, ctx.sampleRate * 0.4, ctx.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      n.buffer = b; f.type = "bandpass"; f.Q.value = 1.1;
+      f.frequency.setValueAtTime(280, t);
+      f.frequency.exponentialRampToValueAtTime(1900, t + 0.32);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.05, t + 0.1);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+      n.connect(f).connect(g).connect(ctx.destination); n.start(t); n.stop(t + 0.4);
+    }
+    return {
+      click, thunk, whoosh,
+      get on() { return on; },
+      set(v) { on = v; if (v) { ensure(); ctx.resume?.(); } }
+    };
+  })();
+  window.QS_SOUND = Sound;
+  const soundBtn = $("#soundToggle");
+  const setSound = v => {
+    Sound.set(v);
+    soundBtn.setAttribute("aria-pressed", String(v));
+    try { localStorage.setItem("qs-sound", v ? "1" : "0"); } catch (e) {}
+    if (v) Sound.click();
+  };
+  soundBtn.addEventListener("click", () => setSound(!Sound.on));
+  // sound is opt-in: never auto-enable, only restore an explicit previous "on"
+  try { if (localStorage.getItem("qs-sound") === "1") { soundBtn.setAttribute("aria-pressed", "true"); Sound.set(true); } } catch (e) {}
+  // wire ticks into existing interactions
+  $$(".fdot").forEach(d => d.addEventListener("click", () => Sound.click()));
+  chipsWrap.addEventListener("click", e => { if (e.target.closest(".fchip")) Sound.click(); });
+  filters.addEventListener("click", e => { if (e.target.closest(".chip")) Sound.click(); });
+
+  /* ───────── mobile menu ───────── */
+  const burger = $("#burger");
+  const mmenu = $("#mobileMenu");
+  let menuOpen = false, menuAnim = false;
+  const menuTl = gsap.timeline({ paused: true })
+    .to(".mmenu__bg", { y: 0, duration: 0.6, ease: "expo.inOut" }, 0)
+    .fromTo(".mmenu__link span", { y: "120%" }, { y: 0, duration: 0.7, stagger: 0.06, ease: "expo.out" }, 0.25)
+    .fromTo(".mmenu__inner .mono-label, .mmenu__base", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.4);
+  gsap.set(".mmenu__bg", { y: "-101%" });
+  function toggleMenu(open) {
+    if (menuAnim || open === menuOpen) return;
+    menuOpen = open; menuAnim = true;
+    burger.classList.toggle("is-open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    mmenu.setAttribute("aria-hidden", String(!open));
+    Sound.whoosh();
+    if (open) {
+      mmenu.classList.add("is-open");
+      if (lenis) lenis.stop();
+      menuTl.timeScale(1).play().eventCallback("onComplete", () => menuAnim = false);
+    } else {
+      menuTl.timeScale(1.6).reverse().eventCallback("onReverseComplete", () => {
+        mmenu.classList.remove("is-open");
+        if (lenis) lenis.start();
+        menuAnim = false;
+      });
+    }
+  }
+  burger.addEventListener("click", () => toggleMenu(!menuOpen));
+  $$(".mmenu__link").forEach(a => a.addEventListener("click", e => {
+    const id = a.getAttribute("href");
+    if (id.startsWith("#")) {
+      e.preventDefault();
+      toggleMenu(false);
+      setTimeout(() => scrollTo(id), 480);
+    } else toggleMenu(false);
+  }));
+  addEventListener("keydown", e => { if (e.key === "Escape" && menuOpen) toggleMenu(false); });
+
+  /* ───────── page wipe (collections → archive) ───────── */
+  const wipe = $("#wipe");
+  function wipeTo(mid) {
+    if (reduced) { mid(); return; }
+    Sound.whoosh();
+    const panels = $$("i", wipe);
+    gsap.timeline()
+      .set(wipe, { pointerEvents: "auto" })
+      .set(panels, { transformOrigin: "50% 100%", scaleY: 0 })
+      .to(panels, { scaleY: 1, duration: 0.5, stagger: 0.09, ease: "expo.inOut" })
+      .add(() => mid())
+      .set(panels, { transformOrigin: "50% 0%" })
+      .to(panels, { scaleY: 0, duration: 0.55, stagger: -0.09, ease: "expo.inOut" }, "+=0.12")
+      .set(wipe, { pointerEvents: "none" });
+  }
+
+  /* ───────── collections: drag to travel ───────── */
+  const collTrack = $("#collectionsTrack");
+  if (collTrack && !reduced) {
+    // no pointer capture: capturing retargets the click event to the track,
+    // which would swallow panel clicks entirely
+    let dragging = false, moved = 0, lastX = 0, vel = 0;
+    collTrack.addEventListener("pointerdown", e => {
+      if (e.pointerType === "touch") return; // native vertical scroll on touch
+      dragging = true; moved = 0; lastX = e.clientX; vel = 0;
+    });
+    addEventListener("pointermove", e => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX; lastX = e.clientX;
+      moved += Math.abs(dx); vel = dx;
+      const y = lenis ? lenis.scroll : scrollY;
+      if (lenis) lenis.scrollTo(y - dx * 1.6, { immediate: true });
+      else window.scrollTo(0, y - dx * 1.6);
+    });
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      if (Math.abs(vel) > 4 && lenis) { // inertia glide
+        lenis.scrollTo(lenis.scroll - vel * 22, { duration: 1.1 });
+      }
+    };
+    addEventListener("pointerup", endDrag);
+    addEventListener("pointercancel", endDrag);
+    // suppress panel click only after a real drag
+    collTrack.addEventListener("click", e => {
+      if (moved > 8) { e.stopPropagation(); e.preventDefault(); }
+      moved = 0;
+    }, true);
+  }
+
+  /* ───────── easter egg: lucky seven ───────── */
+  const toast = $("#toast");
+  let toastT = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("is-on");
+    clearTimeout(toastT);
+    toastT = setTimeout(() => toast.classList.remove("is-on"), 2600);
+  }
+  let eggBusy = false;
+  addEventListener("keydown", e => {
+    if (e.key !== "7" || eggBusy || modalOpenState() || menuOpen) return;
+    eggBusy = true;
+    scrollTo("#top");
+    const dots = $$(".fdot");
+    dots.forEach((d, i) => setTimeout(() => d.click(), 600 + i * 520));
+    setTimeout(() => { showToast("Lucky seven — one handle, every finish."); eggBusy = false; }, 600 + dots.length * 520);
+  });
+  function modalOpenState() { return !modal.hidden; }
+
+  /* ───────── modal focus trap + sounds ───────── */
+  modal.addEventListener("keydown", e => {
+    if (e.key !== "Tab") return;
+    const focusables = $$("button, a[href]", modal).filter(el => el.offsetParent !== null);
+    if (!focusables.length) return;
+    const first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
   addEventListener("load", () => ScrollTrigger.refresh());

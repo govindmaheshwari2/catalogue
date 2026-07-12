@@ -9,11 +9,25 @@
 <meta property="og:description" content="Open. Close. Protect. Treasure. — the complete Q-Seven hardware collection by Godani Metal Co.">
 <meta property="og:image" content="assets/img/covers/cover-zinc-velvet.webp">
 <meta property="og:type" content="website">
+<meta name="theme-color" content="#0d0c0a">
+<link rel="canonical" href="https://docs.qseven.in/">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo-v25-k3kQo8UDI-1M0wlSfdnoLg.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/fraunces-v38-6NU58FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChjeveQ.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/spacegrotesk-v22-V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Godani Metal Co.","brand":{"@type":"Brand","name":"Q-Seven"},"url":"https://docs.qseven.in/","logo":"https://docs.qseven.in/assets/favicon.svg","description":"Q-Seven® by Godani Metal Co. — ISO 9001:2015 certified Indian maker of architectural hardware: mortice handles, locks, pull handles and door kits in zinc, brass and stainless steel.","sameAs":["https://www.qseven.in"]}
+</script>
 </head>
 <body data-theme="dark">
+
+<a class="skip-link" href="#archive">Skip to the product archive</a>
+
+<!-- ═══════════ PAGE WIPE ═══════════ -->
+<div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ═══════════ PRELOADER ═══════════ -->
 <div class="preloader" id="preloader" aria-hidden="true">
@@ -44,10 +58,30 @@
     <a href="#archive" data-cursor="-sm">Archive</a>
     <a href="#story" data-cursor="-sm">Story</a>
   </nav>
-  <a class="nav__cta btn-magnetic" href="catalog.pdf" target="_blank" rel="noopener" data-cursor="-sm">
-    <span class="nav__cta-txt">Catalogue</span><span class="nav__cta-ico">↧</span>
-  </a>
+  <div class="nav__right">
+    <button class="nav__sound" id="soundToggle" aria-pressed="false" aria-label="Toggle sound" data-cursor="-sm">
+      <span class="nav__sound-bars"><i></i><i></i><i></i><i></i></span><span class="nav__sound-txt">SOUND</span>
+    </button>
+    <a class="nav__cta btn-magnetic" href="catalog.pdf" target="_blank" rel="noopener" data-cursor="-sm">
+      <span class="nav__cta-txt">Catalogue</span><span class="nav__cta-ico">↧</span>
+    </a>
+    <button class="nav__burger" id="burger" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu" data-cursor="-sm"><i></i><i></i></button>
+  </div>
 </header>
+
+<!-- ═══════════ MOBILE MENU ═══════════ -->
+<div class="mmenu" id="mobileMenu" aria-hidden="true">
+  <div class="mmenu__bg"></div>
+  <nav class="mmenu__inner" aria-label="Mobile">
+    <p class="mono-label">— MENU</p>
+    <a class="mmenu__link" href="#collections"><span>Collections</span><em>01</em></a>
+    <a class="mmenu__link" href="#finishes"><span>Finishes</span><em>02</em></a>
+    <a class="mmenu__link" href="#archive"><span>Archive</span><em>03</em></a>
+    <a class="mmenu__link" href="#story"><span>Story</span><em>04</em></a>
+    <a class="mmenu__link" href="catalog.pdf" target="_blank" rel="noopener"><span>Catalogue</span><em>PDF</em></a>
+    <p class="mmenu__base">Q-Seven<sup>®</sup> — Godani Metal Co.</p>
+  </nav>
+</div>
 
 <main id="top">
 
@@ -80,6 +114,7 @@
 
     <div class="hero__foot">
       <span class="hero__scroll" id="scrollCue"><i></i>SCROLL</span>
+      <span class="hero__hint" id="heroHint">TRY — PRESS THE HANDLE</span>
       <span class="hero__index">CATALOGUE — 50 PLATES / 78 PIECES</span>
     </div>
   </section>
@@ -109,30 +144,30 @@
     <div class="collections__pin" id="collectionsPin">
       <header class="collections__head">
         <h2 class="sec-title" data-split-words>The Collections</h2>
-        <span class="mono-label" id="collCounter">01 / 06 — SCROLL TO TRAVEL</span>
+        <span class="mono-label" id="collCounter">01 / 06 — DRAG OR SCROLL</span>
       </header>
       <div class="collections__track" id="collectionsTrack">
-        <article class="panel" data-goto="mortice-rose">
+        <article class="panel" data-cursor="-drag" data-goto="mortice-rose">
           <figure class="panel__img"><img src="assets/img/covers/bg-zim22.webp" alt="Zinc series levers on velvet"></figure>
           <div class="panel__meta"><span class="panel__no">01</span><h3>Levers<br>on Rose</h3><p>Seven sculpted silhouettes in zinc — the signature of the house.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
         </article>
-        <article class="panel" data-goto="mortice-plate">
+        <article class="panel" data-cursor="-drag" data-goto="mortice-plate">
           <figure class="panel__img"><img src="assets/img/covers/cover-woven.webp" alt="Mortice handles on plate"></figure>
           <div class="panel__meta"><span class="panel__no">02</span><h3>Handles<br>on Plate</h3><p>Twenty-two full-plate sets, 60 to 250&nbsp;mm, CY &amp; KY.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
         </article>
-        <article class="panel" data-goto="rose-60">
+        <article class="panel" data-cursor="-drag" data-goto="rose-60">
           <figure class="panel__img"><img src="assets/img/covers/cover-conceal.webp" alt="Rose handles"></figure>
           <div class="panel__meta"><span class="panel__no">03</span><h3>Rose<br>&amp; Brass</h3><p>Compact 60&nbsp;mm roses and machined solid-brass levers.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
         </article>
-        <article class="panel" data-goto="locks">
+        <article class="panel" data-cursor="-drag" data-goto="locks">
           <figure class="panel__img"><img src="assets/img/covers/cover-locks.webp" alt="Mortice locks"></figure>
           <div class="panel__meta"><span class="panel__no">04</span><h3>Mortice<br>Locks</h3><p>Bullet-bolt bodies, tri-bolt rims and euro cylinders.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
         </article>
-        <article class="panel" data-goto="pulls">
+        <article class="panel" data-cursor="-drag" data-goto="pulls">
           <figure class="panel__img"><img src="assets/img/covers/cover-camo.webp" alt="Pull handles"></figure>
           <div class="panel__meta"><span class="panel__no">05</span><h3>Pull<br>Handles</h3><p>Pierced, knurled and lattice-cut pulls, 300 – 900&nbsp;mm.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
         </article>
-        <article class="panel" data-goto="kits">
+        <article class="panel" data-cursor="-drag" data-goto="kits">
           <figure class="panel__img"><img src="assets/img/covers/cover-doorkits.webp" alt="Door kits"></figure>
           <div class="panel__meta"><span class="panel__no">06</span><h3>Door<br>Kits</h3><p>Sixteen complete kits — aldrop to stopper, zinc and brass.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
         </article>
@@ -242,6 +277,10 @@
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js","three/addons/environments/RoomEnvironment.js":"./assets/vendor/RoomEnvironment.js"}}</script>
-<script type="module" src="assets/js/hero3d.js"></script>
+<script type="module">
+/* three.js loads after first paint so text + layout win the bandwidth race (LCP) */
+if (document.readyState === "complete") import("./assets/js/hero3d.js");
+else addEventListener("load", () => import("./assets/js/hero3d.js"), { once: true });
+</script>
 </body>
 </html>
