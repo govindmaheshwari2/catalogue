@@ -1,10 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <script>
-    window.location.replace("catalog.pdf");
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q-Seven® — Architectural Hardware | Godani Metal Co.</title>
+<meta name="description" content="Q-Seven® by Godani Metal Co. — India's architectural hardware atelier. Mortice handles, locks, pull handles and door kits in zinc, brass and stainless steel. ISO 9001:2015 certified.">
+<meta property="og:title" content="Q-Seven® — Architectural Hardware">
+<meta property="og:description" content="Open. Close. Protect. Treasure. — the complete Q-Seven hardware collection by Godani Metal Co.">
+<meta property="og:image" content="assets/img/covers/cover-zinc-velvet.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+<body data-theme="dark">
+
+<!-- ═══════════ PRELOADER ═══════════ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader__inner">
+    <div class="preloader__logo"><span>Q</span><span>-</span><span>S</span><span>E</span><span>V</span><span>E</span><span>N</span><sup>®</sup></div>
+    <div class="preloader__line"><i></i></div>
+    <div class="preloader__meta">
+      <span class="preloader__tag">GODANI METAL CO.</span>
+      <span class="preloader__count" id="preCount">00</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CURSOR / PROGRESS / GRAIN ═══════════ -->
+<div class="cursor" id="cursor"><div class="cursor__dot"></div><div class="cursor__ring"></div><span class="cursor__label"></span></div>
+<div class="progress" id="progress"><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" data-cursor="-sm">
+    <svg class="nav__mark" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M17 6.5A10.5 10.5 0 1 1 6.5 17" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><text x="17" y="21.5" text-anchor="middle" font-size="11" font-family="Archivo,system-ui" font-weight="800" fill="currentColor">7</text></svg>
+    <span>Q-Seven<sup>®</sup></span>
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#collections" data-cursor="-sm">Collections</a>
+    <a href="#finishes" data-cursor="-sm">Finishes</a>
+    <a href="#archive" data-cursor="-sm">Archive</a>
+    <a href="#story" data-cursor="-sm">Story</a>
+  </nav>
+  <a class="nav__cta btn-magnetic" href="catalog.pdf" target="_blank" rel="noopener" data-cursor="-sm">
+    <span class="nav__cta-txt">Catalogue</span><span class="nav__cta-ico">↧</span>
+  </a>
+</header>
+
+<main id="top">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__canvas-wrap"><canvas id="gl"></canvas></div>
+    <div class="hero__veil"></div>
+
+    <div class="hero__head">
+      <p class="hero__eyebrow reveal-line"><span>AN ISO 9001 : 2015 CERTIFIED CO. — ARCHITECTURAL HARDWARE, INDIA</span></p>
+    </div>
+
+    <h1 class="hero__title" aria-label="Open. Close. Treasure.">
+      <span class="hero__row"><span class="hero__word" data-split>OPEN.</span></span>
+      <span class="hero__row"><span class="hero__word" data-split>CLOSE.</span></span>
+      <span class="hero__row hero__row--accent"><em class="hero__word hero__word--serif">treasure.</em></span>
+    </h1>
+
+    <div class="hero__side">
+      <p class="hero__copy">Every door deserves a signature.<br>Q-Seven casts it in metal — handles, locks<br>and kits engineered on the principle of simplicity.</p>
+      <div class="hero__finishes" id="heroFinishes" role="group" aria-label="Preview finishes">
+        <span class="hero__finishes-label">FINISH —</span>
+        <button class="fdot is-active" data-finish="brass"    style="--g:linear-gradient(135deg,#8a6420,#f0d488 45%,#b8892f)" aria-label="PVD gold"></button>
+        <button class="fdot" data-finish="rosegold" style="--g:linear-gradient(135deg,#7a4a3a,#f0b49a 45%,#c07a5e)" aria-label="PVD rose gold"></button>
+        <button class="fdot" data-finish="antique"  style="--g:linear-gradient(135deg,#5a4423,#b99a62 50%,#7d6236)" aria-label="Antique"></button>
+        <button class="fdot" data-finish="chrome"   style="--g:linear-gradient(135deg,#9ea2a8,#f4f6f8 45%,#b9bec4)" aria-label="Stainless"></button>
+        <button class="fdot" data-finish="black"    style="--g:linear-gradient(135deg,#050505,#3a3a3a 55%,#0c0c0c)" aria-label="Z-black"></button>
+      </div>
+    </div>
+
+    <div class="hero__foot">
+      <span class="hero__scroll" id="scrollCue"><i></i>SCROLL</span>
+      <span class="hero__index">CATALOGUE — 50 PLATES / 78 PIECES</span>
+    </div>
+  </section>
+
+  <!-- ═══════════ MARQUEE ═══════════ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marqueeTrack">
+      <span>Zinc Series</span><i>✦</i><span>Brass Series</span><i>✦</i><span>SS Series</span><i>✦</i><span>Mortice Locks</span><i>✦</i><span>Pull Handles</span><i>✦</i><span>Door Kits</span><i>✦</i>
+      <span>Zinc Series</span><i>✦</i><span>Brass Series</span><i>✦</i><span>SS Series</span><i>✦</i><span>Mortice Locks</span><i>✦</i><span>Pull Handles</span><i>✦</i><span>Door Kits</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ═══════════ MANIFESTO ═══════════ -->
+  <section class="manifesto" id="manifesto">
+    <p class="manifesto__kicker mono-label">— THE PRINCIPLE OF SIMPLICITY</p>
+    <p class="manifesto__text" id="manifestoText">Q-Seven is India's preferred name in architectural hardware — designed to be simple to operate, simple to clean, simple to maintain. Metal, cast and finished until a door stops being a door and becomes a first impression.</p>
+    <div class="manifesto__stats">
+      <div class="stat"><b data-count="78">0</b><span>Catalogued pieces</span></div>
+      <div class="stat"><b data-count="21">0</b><span>Finishes &amp; platings</span></div>
+      <div class="stat"><b data-count="7">0</b><span>Collections</span></div>
+      <div class="stat"><b data-count="2">0</b><span>Patented designs</span></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ COLLECTIONS — HORIZONTAL ═══════════ -->
+  <section class="collections" id="collections">
+    <div class="collections__pin" id="collectionsPin">
+      <header class="collections__head">
+        <h2 class="sec-title" data-split-words>The Collections</h2>
+        <span class="mono-label" id="collCounter">01 / 06 — SCROLL TO TRAVEL</span>
+      </header>
+      <div class="collections__track" id="collectionsTrack">
+        <article class="panel" data-goto="mortice-rose">
+          <figure class="panel__img"><img src="assets/img/covers/bg-zim22.webp" alt="Zinc series levers on velvet"></figure>
+          <div class="panel__meta"><span class="panel__no">01</span><h3>Levers<br>on Rose</h3><p>Seven sculpted silhouettes in zinc — the signature of the house.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
+        </article>
+        <article class="panel" data-goto="mortice-plate">
+          <figure class="panel__img"><img src="assets/img/covers/cover-woven.webp" alt="Mortice handles on plate"></figure>
+          <div class="panel__meta"><span class="panel__no">02</span><h3>Handles<br>on Plate</h3><p>Twenty-two full-plate sets, 60 to 250&nbsp;mm, CY &amp; KY.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
+        </article>
+        <article class="panel" data-goto="rose-60">
+          <figure class="panel__img"><img src="assets/img/covers/cover-conceal.webp" alt="Rose handles"></figure>
+          <div class="panel__meta"><span class="panel__no">03</span><h3>Rose<br>&amp; Brass</h3><p>Compact 60&nbsp;mm roses and machined solid-brass levers.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
+        </article>
+        <article class="panel" data-goto="locks">
+          <figure class="panel__img"><img src="assets/img/covers/cover-locks.webp" alt="Mortice locks"></figure>
+          <div class="panel__meta"><span class="panel__no">04</span><h3>Mortice<br>Locks</h3><p>Bullet-bolt bodies, tri-bolt rims and euro cylinders.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
+        </article>
+        <article class="panel" data-goto="pulls">
+          <figure class="panel__img"><img src="assets/img/covers/cover-camo.webp" alt="Pull handles"></figure>
+          <div class="panel__meta"><span class="panel__no">05</span><h3>Pull<br>Handles</h3><p>Pierced, knurled and lattice-cut pulls, 300 – 900&nbsp;mm.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
+        </article>
+        <article class="panel" data-goto="kits">
+          <figure class="panel__img"><img src="assets/img/covers/cover-doorkits.webp" alt="Door kits"></figure>
+          <div class="panel__meta"><span class="panel__no">06</span><h3>Door<br>Kits</h3><p>Sixteen complete kits — aldrop to stopper, zinc and brass.</p><button class="panel__cta" data-cursor="-view">Explore →</button></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FINISHES ═══════════ -->
+  <section class="finishes" id="finishes">
+    <div class="finishes__orb" id="finishOrb"></div>
+    <p class="mono-label">— THE WARDROBE OF METAL</p>
+    <h2 class="sec-title" data-split-words>One silhouette. Twenty-one moods.</h2>
+    <p class="finishes__big" id="finishName" aria-live="polite">PVD&nbsp;Gold</p>
+    <div class="finishes__chips" id="finishChips"></div>
+    <p class="finishes__note">PVD plating, antiques, satins and lacquers — every Q-Seven piece is offered in the finishes its geometry deserves. Hover the wardrobe.</p>
+  </section>
+
+  <!-- ═══════════ ARCHIVE ═══════════ -->
+  <section class="archive" id="archive">
+    <header class="archive__head">
+      <p class="mono-label">— THE COMPLETE CATALOGUE, DIGITISED</p>
+      <h2 class="sec-title" data-split-words>The Archive</h2>
+      <div class="archive__filters" id="filters" role="tablist" aria-label="Filter products"></div>
+    </header>
+    <div class="archive__grid" id="grid"></div>
+  </section>
+
+  <!-- ═══════════ OBJETS ═══════════ -->
+  <section class="objets" id="objets">
+    <p class="mono-label">— CAST BRASS OBJETS</p>
+    <div class="objets__duo">
+      <figure class="objet" data-open="GANESH JI" data-cursor="-view">
+        <img src="assets/img/products/ganeshji.webp" alt="Cast brass Ganesh ji idol" loading="lazy">
+        <figcaption><em>Ganesh ji</em><span>an auspicious welcome</span></figcaption>
+      </figure>
+      <div class="objets__word"><h2 class="sec-title">Guardians<br>of the<br>threshold</h2></div>
+      <figure class="objet" data-open="LION KNOCKER" data-cursor="-view">
+        <img src="assets/img/products/lion-knocker.webp" alt="Brass lion door knocker" loading="lazy">
+        <figcaption><em>Lion Knocker</em><span>announce yourself</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ═══════════ STORY ═══════════ -->
+  <section class="story" id="story">
+    <div class="story__bg parallax-img"><img src="assets/img/covers/cover-zinc-velvet.webp" alt="" loading="lazy"></div>
+    <blockquote class="story__quote">
+      <p data-split-words>“Open, close, store, protect, hide, find <em>and treasure.</em>”</p>
+      <cite>— the Q-Seven promise, printed on plate one of every catalogue since the first casting.</cite>
+    </blockquote>
+    <div class="story__cols">
+      <div class="story__col"><h3>House of Godani</h3><p>Q-Seven is the hardware marque of <b>Godani Metal Co.</b> — an ISO 9001:2015 certified Indian maker operating at international scale, with prestigious business associates nationwide.</p></div>
+      <div class="story__col"><h3>Design first</h3><p>New products are evolved for the ever-changing taste of the customer — latest technology in design and development, judged on functionality and durability, priced on value.</p></div>
+      <div class="story__col"><h3>Simple, always</h3><p>Maximum simplicity is the only brief: simple to operate, simple to clean, simple to maintain and replace at minimum cost. Two designs patented; all of them unmistakable.</p></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer" id="contact">
+    <div class="footer__cta">
+      <p class="mono-label">— TAKE THE BOOK HOME</p>
+      <h2 class="sec-title" data-split-words>Fifty plates of metal, bound.</h2>
+      <div class="footer__btns">
+        <a class="btn btn--solid btn-magnetic" href="catalog.pdf" target="_blank" rel="noopener" data-cursor="-sm">Download the catalogue <small>PDF · 7&nbsp;MB</small></a>
+        <a class="btn btn--ghost btn-magnetic" href="https://www.qseven.in" target="_blank" rel="noopener" data-cursor="-sm">qseven.in ↗</a>
+      </div>
+    </div>
+    <div class="footer__giant" aria-hidden="true"><span>Q-SEVEN</span></div>
+    <div class="footer__base">
+      <span>© 2026 Godani Metal Co. — Q-Seven<sup>®</sup></span>
+      <span>An ISO 9001 : 2015 certified company</span>
+      <span>docs.qseven.in</span>
+    </div>
+  </footer>
+</main>
+
+<!-- ═══════════ PRODUCT MODAL ═══════════ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalModel" hidden>
+  <div class="modal__backdrop" data-close></div>
+  <article class="modal__card">
+    <button class="modal__close" data-close aria-label="Close" data-cursor="-sm">✕</button>
+    <figure class="modal__fig"><img id="modalImg" src="" alt=""></figure>
+    <div class="modal__body">
+      <p class="mono-label" id="modalSeries"></p>
+      <h3 id="modalModel"></h3>
+      <p class="modal__desc" id="modalDesc"></p>
+      <dl class="modal__specs">
+        <div><dt>Material</dt><dd id="modalMaterial"></dd></div>
+        <div><dt>Size</dt><dd id="modalSize"></dd></div>
+        <div><dt>Type</dt><dd id="modalType"></dd></div>
+      </dl>
+      <div class="modal__finishes"><p class="mono-label">FINISHES</p><div id="modalFinishes"></div></div>
+      <div class="modal__foot">
+        <a id="modalPdf" class="btn btn--ghost" href="catalog.pdf" target="_blank" rel="noopener">View plate in catalogue ↗</a>
+        <div class="modal__nav">
+          <button id="modalPrev" aria-label="Previous product" data-cursor="-sm">←</button>
+          <button id="modalNext" aria-label="Next product" data-cursor="-sm">→</button>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js","three/addons/environments/RoomEnvironment.js":"./assets/vendor/RoomEnvironment.js"}}</script>
+<script type="module" src="assets/js/hero3d.js"></script>
 </body>
 </html>
