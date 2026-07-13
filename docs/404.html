@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — This door doesn't open | Q-Seven®</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0d0c0a">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+  :root{--bg:#0d0c0a;--ink:#ece5d8;--dim:#9b917e;--brass:#c9a24a;--brass-hi:#ecd192;--red:#e02b1f}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:1.4rem;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,sans-serif;
+    text-align:center;padding:2rem;overflow:hidden}
+  .label{font-family:"Space Grotesk",monospace;font-size:.66rem;letter-spacing:.32em;color:var(--brass)}
+  h1{font-weight:800;font-stretch:120%;font-size:clamp(5rem,22vw,15rem);line-height:.9;
+    color:transparent;-webkit-text-stroke:1.5px rgba(236,229,216,.4);position:relative;user-select:none}
+  h1 b{position:absolute;inset:0;color:var(--brass-hi);-webkit-text-stroke:0;
+    clip-path:inset(0 0 100% 0);animation:fill 2.6s cubic-bezier(.65,.05,0,1) .3s forwards}
+  @keyframes fill{to{clip-path:inset(0 0 0% 0)}}
+  h2{font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:340;
+    font-size:clamp(1.4rem,4vw,2.4rem);color:var(--brass-hi)}
+  p{color:var(--dim);max-width:44ch;font-size:.95rem;line-height:1.7}
+  .row{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+  a{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;border-radius:99px;
+    padding:.9rem 1.8rem;font-family:"Space Grotesk",monospace;font-size:.7rem;letter-spacing:.2em;
+    text-transform:uppercase;transition:all .3s}
+  a.solid{background:var(--brass);color:#0d0c0a}
+  a.solid:hover{background:var(--brass-hi)}
+  a.ghost{border:1px solid rgba(236,229,216,.18);color:var(--ink)}
+  a.ghost:hover{border-color:var(--brass);color:var(--brass-hi)}
+  .base{position:fixed;bottom:1.4rem;font-family:"Space Grotesk",monospace;font-size:.6rem;
+    letter-spacing:.26em;color:var(--dim);text-transform:uppercase}
+  .base sup{color:var(--red)}
+  .key{position:fixed;inset:auto auto -6vh -4vw;width:36vw;max-width:420px;opacity:.07;pointer-events:none}
+</style>
+</head>
+<body>
+  <svg class="key" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="18" fill="none" stroke="#ecd192" stroke-width="6"/><path d="M50 52v38M50 74h14M50 86h20" stroke="#ecd192" stroke-width="6" stroke-linecap="round"/></svg>
+  <span class="label">Q-SEVEN® — PLATE NOT FOUND</span>
+  <h1>404<b>404</b></h1>
+  <h2>This door doesn't open.</h2>
+  <p>The page you tried isn't in the catalogue — perhaps it was re-keyed, or it never left the foundry. Fifty plates of metal are waiting behind the right door.</p>
+  <div class="row">
+    <a class="solid" href="/">Back to the collection</a>
+    <a class="ghost" href="catalog.pdf">Open the catalogue ↗</a>
+  </div>
+  <span class="base">© 2026 Godani Metal Co. — Q-Seven<sup>®</sup></span>
+</body>
+</html>
